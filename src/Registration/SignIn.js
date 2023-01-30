@@ -22,7 +22,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
+import authFetch from '../axios/Intercepter';
 
 const theme = createTheme();
 
@@ -40,7 +40,7 @@ export default function SignIn() {
 
     event.preventDefault();
 
-    axios.post("http://localhost:4000/accounts/register", data)
+    authFetch.post("http://localhost:4000/accounts/register", data)
       .then(y => {
         if (y.status == 200 || y.status == 201) {
           toast.success("Sucessfully Resitrastion");

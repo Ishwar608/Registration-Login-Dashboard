@@ -16,7 +16,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
+import authFetch from '../axios/Intercepter';
 
 const theme = createTheme();
 
@@ -31,7 +31,7 @@ export default function Login() {
     event.preventDefault();
 
 
-    axios.post("http://localhost:4000/accounts/authenticate", data)
+    authFetch.post("/accounts/authenticate", data)
       .then(y => {
         if (y.status == 200 || y.status == 201) {
           toast.success("Sucessfully Login");
@@ -53,7 +53,7 @@ export default function Login() {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMouseDownPassword = (event:React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
