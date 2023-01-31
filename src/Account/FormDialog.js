@@ -32,7 +32,7 @@ const theme = createTheme();
    React.useEffect(()=> {
 
     setData(edtData);
-   });
+   },[edtData]);
     
   
   const handleSubmit = (event) => {
