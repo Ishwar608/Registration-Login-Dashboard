@@ -40,7 +40,7 @@ export default function SignIn() {
 
     event.preventDefault();
 
-    authFetch.post("http://localhost:4000/accounts/register", data)
+    authFetch.post("/accounts/register", data)
       .then(y => {
         if (y.status == 200 || y.status == 201) {
           toast.success("Sucessfully Resitrastion");
