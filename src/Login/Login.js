@@ -14,49 +14,59 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import authFetch from '../axios/Intercepter';
+import { useDispatch, useSelector } from 'react-redux';
+import { userLogin } from '../ReduxStore/action/loginAction';
+import { useFormik } from 'formik';
+import * as Yup from "yup";
 
 const theme = createTheme();
 
 export default function Login() {
-  const [data, setData] = React.useState({
-    email: "",
-    password: ""
-  })
 
-  const handleSubmit = (event) => {
-
-    event.preventDefault();
+  const loginData = useSelector(y => y.login);
+  const disData = useDispatch();
 
 
-    authFetch.post("/accounts/authenticate", data)
-      .then(y => {
-        if (y.status == 200 || y.status == 201) {
-          toast.success("Sucessfully Login");
-          localStorage.setItem("user",JSON.stringify(y.data));
-        }
-        console.log(y);
-      }).catch(y => {
-        toast.error("Error");
-      })
+  const SignupSchema = Yup.object().shape({
+    email: Yup.string()
+      .email('Invalid email')
+      .required('Please Enter Your Email!'),
 
-  };
-  const inputHandlar = (e) => {
-      setData({ ...data, [e.target.name]: e.target.value });
-   
-  }
+    password: Yup.string()
+      .required("Please Enter Password"),
+  });
 
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: ""
+    },
+
+    validationSchema: SignupSchema,
+
+    onSubmit: (values) => {
+      disData(userLogin(values));
+    },
+
+  });
 
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (event:React.MouseEvent<HTMLButtonElement>) => {
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
+  const ErrorM = ({ children }) => {
+    return (
+      <div>
+        <font color="red">{children}</font>
+      </div>
+    );
+  };
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -73,31 +83,29 @@ export default function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-              Login
+            Login
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={formik.handleSubmit} noValidate sx={{ mt: 1 }}>
 
             <TextField
               margin="normal"
-              required
               fullWidth
               id="email"
               label="Email Address"
               name="email"
               autoComplete="email"
-              onChange={inputHandlar}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
             />
-
             <TextField
               margin="normal"
-              required
               fullWidth
               name="password"
               label="Password"
               type={showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
-              onChange={inputHandlar}
 
               InputProps={{
                 endAdornment: <InputAdornment position="end">
@@ -111,6 +119,10 @@ export default function Login() {
                   </IconButton>
                 </InputAdornment>,
               }}
+
+              onChange={formik.handleChange}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
             />
             <Button
               type="submit"
@@ -130,6 +142,6 @@ export default function Login() {
           </Box>
         </Box>
       </Container>
-    </ThemeProvider>
+    </ThemeProvider >
   );
 }

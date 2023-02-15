@@ -57,8 +57,8 @@ const theme = createTheme();
     }
   }
 
-  console.log(data);
-  console.log(edtData);
+  // console.log(data);
+  // console.log(edtData);
 
 return (
     <div>

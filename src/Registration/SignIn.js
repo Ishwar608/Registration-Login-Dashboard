@@ -20,45 +20,67 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import authFetch from '../axios/Intercepter';
+import { useDispatch, useSelector } from 'react-redux';
+import { userRegi } from '../ReduxStore/action/regiAction';
+import { useFormik } from 'formik';
+import * as Yup from "yup";
 
 const theme = createTheme();
 
 export default function SignIn() {
-  const [data, setData] = React.useState({
-    title: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    acceptTerms: false
-  })
-  const handleSubmit = (event) => {
 
-    event.preventDefault();
+  const regiData = useSelector(y => y.regi);
+  const disData = useDispatch();
 
-    authFetch.post("/accounts/register", data)
-      .then(y => {
-        if (y.status == 200 || y.status == 201) {
-          toast.success("Sucessfully Resitrastion");
-        }
-      }).catch(y => {
-        toast.error("Error");
-      })
 
-  };
+  const SignupSchema = Yup.object().shape({
+    title: Yup.string()
+      .required('Please Select the title !'),
+    firstName: Yup.string()
+      .min(2, 'Too Short!')
+      .max(10, 'Too Long!')
+      .required('Please Enter Your First Name !'),
 
-  const inputHandlar = (e) => {
-    if (e.target.type != "checkbox") {
-      setData({ ...data, [e.target.name]: e.target.value });
-    } else {
-      setData({ ...data, [e.target.name]: e.target.checked });
-    }
-  }
+    lastName: Yup.string()
+      .min(2, 'Too Short!')
+      .max(10, 'Too Long!')
+      .required('Please Enter Your Last Name !'),
 
+    email: Yup.string()
+      .email('Invalid email')
+      .required('Please Enter Your Email!'),
+
+    password: Yup.string()
+      .matches(/^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[@$!%*#?&])[A-Za-z0-9@$!%*#?&]{8,}$/, ' Must use Alpha Numeric with special char and length 8 must be 8 charcarter')
+      .required("Please Enter Password"),
+
+    confirmPassword: Yup.string().required("Please Enter Confirm Password").
+      oneOf([null, Yup.ref('password')], "password should match"),
+
+    acceptTerms: Yup.bool()
+      .oneOf([true], "You must accept the terms and conditions")
+
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      acceptTerms: false
+    },
+
+    validationSchema: SignupSchema,
+
+    onSubmit: (values) => {
+      disData(userRegi(values))
+
+    },
+  });
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -85,7 +107,7 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={formik.handleSubmit} noValidate sx={{ mt: 1 }}>
 
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Title</InputLabel>
@@ -94,7 +116,9 @@ export default function SignIn() {
                 id="demo-simple-select"
                 label="Title"
                 name="title"
-                onChange={inputHandlar}
+                onChange={formik.handleChange}
+                error={formik.touched.title && Boolean(formik.errors.title)}
+                helperText={formik.touched.title && formik.errors.title}
               >
                 <MenuItem value="Mr">Mr</MenuItem>
                 <MenuItem value="Miss">Miss</MenuItem>
@@ -109,7 +133,9 @@ export default function SignIn() {
               id="text"
               label="First Name"
               name="firstName"
-              onChange={inputHandlar}
+              onChange={formik.handleChange}
+              error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+              helperText={formik.touched.firstName && formik.errors.firstName}
             />
             <TextField
               margin="normal"
@@ -118,7 +144,9 @@ export default function SignIn() {
               id="text"
               label="Last Name"
               name="lastName"
-              onChange={inputHandlar}
+              onChange={formik.handleChange}
+              error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+              helperText={formik.touched.lastName && formik.errors.lastName}
             />
             <TextField
               margin="normal"
@@ -128,7 +156,9 @@ export default function SignIn() {
               label="Email Address"
               name="email"
               autoComplete="email"
-              onChange={inputHandlar}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
             />
 
             <TextField
@@ -141,8 +171,9 @@ export default function SignIn() {
               type={showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
-              onChange={inputHandlar}
-
+              onChange={formik.handleChange}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
               InputProps={{
                 endAdornment: <InputAdornment position="end">
                   <IconButton
@@ -166,7 +197,9 @@ export default function SignIn() {
               id="password"
               type={showPassword ? 'text' : 'password'}
               autoComplete="current-password"
-              onChange={inputHandlar}
+              onChange={formik.handleChange}
+              error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
+              helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
               InputProps={{
                 endAdornment: <InputAdornment position="end">
                   <IconButton
@@ -181,9 +214,15 @@ export default function SignIn() {
               }}
             />
             <FormControlLabel
-              control={<Checkbox typeof='checkbox' name="acceptTerms" value="remember" color="primary" onClick={inputHandlar} />}
+              control={<Checkbox typeof='checkbox' name="acceptTerms" value="remember" color="primary" onClick={formik.handleChange} 
+              
+              />}
               label="Remember me"
+              helperText={formik.touched.acceptTerms && formik.errors.acceptTerms}
+              error={formik.touched.acceptTerms && Boolean(formik.errors.acceptTerms)}
+            
             />
+
             <Button
               type="submit"
               fullWidth
