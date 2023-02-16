@@ -7,14 +7,19 @@ import Login from './Login/Login';
 import { Dashboard } from './Account/Dashboard';
 import { Provider } from 'react-redux';
 import store from './ReduxStore/store/store';
+import Navbar from './Navbar/Navbar';
+import { Route,  Routes } from 'react-router-dom';
 function App() {
   return (
     <>
       <Provider store={store}>
         <ToastContainer />
-        <SignIn />
-        <Login /> 
-        <Dashboard />
+        <Navbar />
+        <Routes>
+          <Route path='/' element={<Login />} />
+          <Route path='regi' element={<SignIn />} />
+          <Route path='/dashboard' element={<Dashboard />} />
+        </Routes>
       </Provider>
     </>
   );
