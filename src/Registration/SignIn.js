@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userRegi } from '../ReduxStore/action/regiAction';
 import { useFormik } from 'formik';
 import * as Yup from "yup";
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme();
 
@@ -32,7 +33,7 @@ export default function SignIn() {
 
   const regiData = useSelector(y => y.regi);
   const disData = useDispatch();
-
+  const myNav = useNavigate()
 
   const SignupSchema = Yup.object().shape({
     title: Yup.string()
@@ -78,7 +79,7 @@ export default function SignIn() {
 
     onSubmit: (values) => {
       disData(userRegi(values))
-
+      myNav('/')
     },
   });
   const [showPassword, setShowPassword] = React.useState(false);

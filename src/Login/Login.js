@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userLogin } from '../ReduxStore/action/loginAction';
 import { useFormik } from 'formik';
 import * as Yup from "yup";
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme();
 
@@ -26,7 +27,7 @@ export default function Login() {
 
   const loginData = useSelector(y => y.login);
   const disData = useDispatch();
-
+  const myNav = useNavigate();
 
   const SignupSchema = Yup.object().shape({
     email: Yup.string()
@@ -48,6 +49,7 @@ export default function Login() {
 
     onSubmit: (values) => {
       disData(userLogin(values));
+      myNav('/dashboard');
     },
 
   });

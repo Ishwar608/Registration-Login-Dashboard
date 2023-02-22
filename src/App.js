@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import store from './ReduxStore/store/store';
 import Navbar from './Navbar/Navbar';
 import { Route,  Routes } from 'react-router-dom';
+import RequireAuth from './private/RequireAuth';
 function App() {
   return (
     <>
@@ -18,7 +19,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Login />} />
           <Route path='regi' element={<SignIn />} />
-          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/dashboard' element={<RequireAuth><Dashboard /></RequireAuth>} />
         </Routes>
       </Provider>
     </>

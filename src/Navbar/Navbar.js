@@ -6,10 +6,15 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 export default function Navbar() {
+    const myNavigation =useNavigate();
+    const logOut = () =>{
+        localStorage.removeItem("user");
+        myNavigation("/");
+    }
     return (
         <div> <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -42,14 +47,8 @@ export default function Navbar() {
                     >
                         <Button color="inherit">Sing Up</Button>
                     </Link>
-                    <Link to='/dashboard'
-                        style={{
-                            textDecoration: 'none',
-                            color: 'inherit'
-                        }}
-                    >
-                        <Button color="inherit">Dashboard</Button>
-                    </Link>
+                
+                        <Button color="inherit" onClick={logOut}>Log-Out</Button>
                 </Toolbar>
             </AppBar>
         </Box>

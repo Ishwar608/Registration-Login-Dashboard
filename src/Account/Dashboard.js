@@ -68,7 +68,7 @@ export const Dashboard = () => {
                     {
                         data.map((element,index) => {
                             return (
-                                <tr>
+                                <tr key={index}>
                                     <td>{element.id}</td>
                                     <td>{element.title}</td>
                                     <td>{element.firstName}</td>
