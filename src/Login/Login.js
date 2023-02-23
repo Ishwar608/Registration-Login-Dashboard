@@ -25,9 +25,10 @@ const theme = createTheme();
 
 export default function Login() {
 
-  const loginData = useSelector(y => y.login);
+  const loginData = useSelector(y => y.login).items;
   const disData = useDispatch();
   const myNav = useNavigate();
+
 
   const SignupSchema = Yup.object().shape({
     email: Yup.string()
@@ -37,6 +38,15 @@ export default function Login() {
     password: Yup.string()
       .required("Please Enter Password"),
   });
+
+  React.useEffect(()=> {
+
+    if(loginData != undefined)
+    {
+      myNav('/dashboard');
+    }
+
+  },[loginData])
 
 
   const formik = useFormik({
@@ -49,7 +59,8 @@ export default function Login() {
 
     onSubmit: (values) => {
       disData(userLogin(values));
-      myNav('/dashboard');
+      
+      // myNav('/dashboard');
     },
 
   });

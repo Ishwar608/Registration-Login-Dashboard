@@ -1,6 +1,6 @@
 const initialState = {
 
-    items : {},
+    items : undefined,
     isloadding: false,
     error : {}
 
