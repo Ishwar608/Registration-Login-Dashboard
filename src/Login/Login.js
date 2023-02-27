@@ -23,7 +23,7 @@ import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme();
 
-export default function Login() {
+export default function Login({setLgout}) {
 
   const loginData = useSelector(y => y.login).items;
   const disData = useDispatch();
@@ -59,6 +59,7 @@ export default function Login() {
 
     onSubmit: (values) => {
       disData(userLogin(values));
+      setLgout(true);
       
       // myNav('/dashboard');
     },

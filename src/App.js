@@ -10,14 +10,16 @@ import store from './ReduxStore/store/store';
 import Navbar from './Navbar/Navbar';
 import { Route,  Routes } from 'react-router-dom';
 import RequireAuth from './private/RequireAuth';
+import { useState } from 'react';
 function App() {
+  const [lgout,setLgout] = useState(false);
   return (
     <>
       <Provider store={store}>
         <ToastContainer />
-        <Navbar />
+        <Navbar lgout={lgout} setLgout={setLgout}/>
         <Routes>
-          <Route path='/' element={<Login />} />
+          <Route path='/' element={<Login setLgout={setLgout}/>} />
           <Route path='regi' element={<SignIn />} />
           <Route path='/dashboard' element={<RequireAuth><Dashboard /></RequireAuth>} />
         </Routes>
