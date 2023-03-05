@@ -7,14 +7,19 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { clrLoginData } from '../ReduxStore/action/loginAction';
 
 
-export default function Navbar({lgout,setLgout}) {
-    const myNavigation =useNavigate();
-    const logOut = () =>{
-        localStorage.removeItem("user");
-        myNavigation("/");
+export default function Navbar({ lgout, setLgout }) {
+    const disData = useDispatch();
+
+    const myNavigation = useNavigate();
+    const logOut = () => {
+        disData(clrLoginData(undefined))
         setLgout(false);
+        myNavigation("/");
+        localStorage.removeItem("user");
     }
     return (
         <div> <Box sx={{ flexGrow: 1 }}>
@@ -48,10 +53,10 @@ export default function Navbar({lgout,setLgout}) {
                     >
                         <Button color="inherit">Sing Up</Button>
                     </Link>
-                
-                      {
-                        lgout?  <Button color="inherit" onClick={logOut}>Log-Out</Button>:''
-                      }
+
+                    {
+                        lgout ? <Button color="inherit" onClick={logOut}>Log-Out</Button> : ''
+                    }
                 </Toolbar>
             </AppBar>
         </Box>

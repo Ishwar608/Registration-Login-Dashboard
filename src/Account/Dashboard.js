@@ -25,7 +25,11 @@ export const Dashboard = () => {
   
 
     useEffect(() => {
-        getData();
+        authFetch.get("/accounts").then(y => {
+            if (y.status == 200 || y.status == 201) {
+                setData(y.data);
+            }
+        })
     }, [])
 
     const getData = () =>{

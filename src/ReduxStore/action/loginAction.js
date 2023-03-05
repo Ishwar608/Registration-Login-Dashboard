@@ -23,3 +23,9 @@ export  const userLogin = (data) => {
     };
   };
 
+export const clrLoginData = (payload) => ({
+  type: 'clear',
+  payload
+})
+
+

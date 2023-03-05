@@ -18,6 +18,10 @@ export default (state = initialState, { type, payload }) => {
    case 'FAIL' :
 
     return {...state, error : payload, isloadding: false}
+
+   case 'clear' :
+
+    return {...state, items : payload, isloadding: false}
     
   default:
     return state

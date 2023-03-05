@@ -43,6 +43,7 @@ export default function Login({setLgout}) {
 
     if(loginData != undefined)
     {
+      setLgout(true);
       myNav('/dashboard');
     }
 
@@ -59,7 +60,6 @@ export default function Login({setLgout}) {
 
     onSubmit: (values) => {
       disData(userLogin(values));
-      setLgout(true);
       
       // myNav('/dashboard');
     },
