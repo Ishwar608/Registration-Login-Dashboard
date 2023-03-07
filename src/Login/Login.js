@@ -20,12 +20,13 @@ import { userLogin } from '../ReduxStore/action/loginAction';
 import { useFormik } from 'formik';
 import * as Yup from "yup";
 import { useNavigate } from 'react-router-dom';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 const theme = createTheme();
 
-export default function Login({setLgout}) {
+export default function Login({ setLgout }) {
 
-  const loginData = useSelector(y => y.login).items;
+  const loginData = useSelector(y => y.login);
   const disData = useDispatch();
   const myNav = useNavigate();
 
@@ -39,16 +40,14 @@ export default function Login({setLgout}) {
       .required("Please Enter Password"),
   });
 
-  React.useEffect(()=> {
-
-    if(loginData != undefined)
-    {
+  React.useEffect(() => {
+    console.log(loginData );
+    if (loginData.items != undefined) {
       setLgout(true);
       myNav('/dashboard');
     }
 
-  },[loginData])
-
+  }, [loginData.items])
 
   const formik = useFormik({
     initialValues: {
@@ -60,7 +59,7 @@ export default function Login({setLgout}) {
 
     onSubmit: (values) => {
       disData(userLogin(values));
-      
+
       // myNav('/dashboard');
     },
 
@@ -83,6 +82,16 @@ export default function Login({setLgout}) {
   };
   return (
     <ThemeProvider theme={theme}>
+      {
+        loginData.isloadding ?
+          <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open='true'
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+          : null
+      }
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -138,16 +147,16 @@ export default function Login({setLgout}) {
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
             />
-          
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Login In
-              </Button>
-         
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Login In
+            </Button>
+
 
             <Grid container>
               <Grid item xs>

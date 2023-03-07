@@ -21,3 +21,9 @@ export  const userRegi = (data) => {
       );
     };
   };
+
+  export const clrRegiData = (payload) => ({
+    type: 'clear',
+    payload
+  })
+  

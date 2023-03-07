@@ -4,7 +4,8 @@ let myToken = JSON.parse(localStorage.getItem("user"));
 
 const authFetch = axios.create({
   
-  baseURL: "https://real-pear-fly-kilt.cyclic.app"
+  // baseURL: "https://real-pear-fly-kilt.cyclic.app"
+  baseURL: "http://localhost:4000"
 
 })
 

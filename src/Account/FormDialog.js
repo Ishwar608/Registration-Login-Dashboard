@@ -41,7 +41,7 @@ const theme = createTheme();
 
       if (y.status == 200 || y.status == 201) {
         toast.success("Sucessfully Update");
-        console.log(y);
+        // console.log(y);
         dataLoad();
       }
     }).catch(y => {
@@ -57,8 +57,7 @@ const theme = createTheme();
     }
   }
 
-  // console.log(data);
-  // console.log(edtData);
+  
 
 return (
     <div>
